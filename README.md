@@ -12,7 +12,8 @@ To run the bot:
 If you want to recalculate the embeddings (with a different model or params), delete them and the index and recalculate using
 `calculate_embeddings.py` as an example
 
-For more details, see [link to the blog TBC]
+For more details, see https://neo4j.com/developer-blog/asvs-security-graph-chatbot/
+
 
 ## To run locally, set the following env variables:
 - NEO4J_URI
