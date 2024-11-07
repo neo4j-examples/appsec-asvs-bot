@@ -1,0 +1,4 @@
+neo4j~=5.25.0
+openai~=1.51.0
+requests~=2.32.3
+langchain-text-splitters~=0.3.0
