@@ -4,15 +4,12 @@ This repo includes ASVS-neo4j.dump: graph representation of ASVS v5 with pre-cal
 
 Import it to your Aura instance or your local Neo4j server and use the connection URI and the credentials
 
-It has two scripts that can be run locally (or adapted and deployed in your environment)
+It has severa; scripts that can be run locally (or adapted and deployed in your environment)
 
 To run the bot:
 `> streamlit asvs_bot.py`
 
-If you want to recalculate the embeddings (with a different model or params), delete them and the index and recalculate using
-`calculate_embeddings.py` as an example
-
-If you want to import a fresh version of ASVS use code under `/parser`.
+If you want to import a fresh version of ASVS and recalculate the embeddings use code under `/parser`.
 
 For more details, see https://neo4j.com/developer-blog/asvs-security-graph-chatbot/
 
