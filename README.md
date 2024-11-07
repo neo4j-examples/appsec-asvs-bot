@@ -1,10 +1,10 @@
 # ASVS bot
 
-This repo includes ASVS-neo4j.dump: graph representation of ASVS v5 with pre-calculated vector embeddings and vector index.
+This repo includes ASVS-v5-neo4j.backup: graph representation of ASVS v5 with pre-calculated vector embeddings and vector index.
 
 Import it to your Aura instance or your local Neo4j server and use the connection URI and the credentials
 
-It has severa; scripts that can be run locally (or adapted and deployed in your environment)
+It has several scripts that can be run locally (or adapted and deployed in your environment)
 
 To run the bot:
 `> streamlit asvs_bot.py`
