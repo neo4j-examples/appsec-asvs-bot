@@ -9,14 +9,14 @@ NEO4J_USER = os.environ['NEO4J_USER']
 NEO4J_PASSWORD = os.environ['NEO4J_PASS']
 OPENAI_KEY = os.environ['OPENAI_API_KEY']
 
-EMBEDDING_MODEL = "text-embedding-ada-002"
-OPENAI_MODEL = "gpt-4-turbo"  # replace with gpt-4 for production
+EMBEDDING_MODEL = "text-embedding-3-small"
+OPENAI_MODEL = "gpt-4o"  # replace with gpt-4 for production
 
 st.title('🦜🔗 AppSec Verification Standard (ASVS) Chat App')
 st.write("This program looks up ASVS requirements relevant to your feature description.")
 with st.sidebar:
     st.subheader("Browse the full ASVS:")
-    st.write("https://github.com/OWASP/ASVS/tree/master/4.0/en")
+    st.write("https://github.com/OWASP/ASVS/tree/master/5.0/en")
     st.subheader("Here is an example of feature description:")
     st.markdown('''_We want to add some pay-per-use features in our SaaS product. Each cloud tenant will have
      an agent monitoring the usage of these features. The agents send data through a custom proxy to BigQuery.
@@ -61,16 +61,12 @@ def generate_response(input_text):
 
     r = graph.query("""
 
-        // 2. Find other requirements which have high semantic similarity on description
+        // Find other requirements which have high semantic similarity on description
         CALL db.index.vector.queryNodes("embeddingIndex", $lookup_num, $feature_embedding) YIELD node, score
         WITH node, score
-        WHERE score > $threshold // exclude low-scoring matches
+        WHERE node:Requirement and score > $threshold // exclude low-scoring matches and focus only on requirements
 
-        // 3. From the returned Embedding nodes, find their connected Requirement nodes
-        MATCH (m2:Requirement)-[:HAS_EMBEDDING]->(node)
-        WHERE node.key = '`Verification Requirement`'
-
-        RETURN  m2.`#` AS reqNumber, m2.`Verification Requirement` AS requirement, score
+        RETURN  node.ID AS reqNumber, node.`Description` AS requirement, score
         ORDER BY score DESC;""",
                     {'feature_embedding': embedding.data[0].embedding,
                             'lookup_num': num_reqs,
