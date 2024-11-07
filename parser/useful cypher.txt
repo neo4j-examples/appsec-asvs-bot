@@ -1,0 +1,36 @@
+MATCH (m1:Requirement{ID:'2.9.1'})
+                WITH m1, m1.embedding as e
+
+                // 2. Find other requirements which have high semantic similarity on description
+                CALL db.index.vector.queryNodes("embeddingIndex", 10, e) YIELD node, score
+                WITH m1, node AS m2, score
+                WHERE m2:Requirement and score < 1.0  and score > 0.80 // exclude self and low-scoring matches
+
+                // 3. For returned Requirement nodes, check they are in the same area and/or Control
+                // Counting hops between the two requirements. 2 means same area, 4 means same control
+                WITH m1, m2, score
+                MATCH (m1)-[r*..6]-(m2)
+
+                // 4. Use sameArea and sameControl to calculate weights and apply to similarity score
+                WITH m1, m2, score,
+                    CASE size(r)
+                        WHEN 2 THEN 2
+                        WHEN 4 THEN 1+log(2)
+                        ELSE 1
+                    END AS proximity
+
+                RETURN  m2.ID AS reqNumber, m2.`Description` AS requirement, score,
+                 proximity * score AS rank
+                ORDER BY rank DESC
+
+CREATE FULLTEXT INDEX chapter_text_index
+FOR (c:Chapter)
+ON EACH [c.name, c.`Control Objective`]
+
+CREATE FULLTEXT INDEX requirement_text_index
+FOR (c:Requirement)
+ON EACH [c.Description]
+
+CREATE FULLTEXT INDEX section_text_index
+FOR (c:Section)
+ON EACH [c.name, c.Description]
