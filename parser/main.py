@@ -24,7 +24,11 @@ def update_chapter(md):
 
 def create_requirement(md, section_num):
     NIST = '' # Not all requirements have NIST reference, need to treat like optional
-    if md.count("|") == 7:
+    CWE = '' # Not all requirements have CWE reference, need to treat like optional
+
+    if md.count("|") == 6:
+        dummy1, req_num, req, L1, L2, L3, dummy2 = md.split('|')
+    elif md.count("|") == 7:
         dummy1, req_num, req, L1, L2, L3, CWE, dummy2 = md.split('|')
     elif md.count("|") == 8:
         dummy1, req_num, req, L1, L2, L3, CWE, NIST, dummy2 = md.split('|')
@@ -82,7 +86,9 @@ def weird_section(md):
     if ('References' in md or
             'Additional US Agency Requirements' in md or
             'Glossary of terms' in md or
-            'Definition' in md):
+            'Definition' in md or
+            'Terminology' in md or
+            'OAuth 2.0 Basics' in md):
         return True
     else:
         return False
