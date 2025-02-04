@@ -7,7 +7,7 @@ Import it to your Aura instance or your local Neo4j server and use the connectio
 It has two scripts that can be run locally (or adapted and deployed in your environment)
 
 To run the bot:
-`> streamlit asvs_bot.py`
+`> streamlit run asvs_bot.py`
 
 If you want to recalculate the embeddings (with a different model or params), delete them and the index and recalculate using
 `calculate_embeddings.py` as an example
